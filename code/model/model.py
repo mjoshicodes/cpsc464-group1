@@ -233,9 +233,9 @@ def train_lasso(train_df, holdout_df,
         plt.xscale('log')
 
         if include_race:
-            filename = 'model_lasso_{}_race.png'.format(y_col)
+            filename = 'our_model_lasso_{}_race.png'.format(y_col)
         else:
-            filename = 'model_lasso_{}.png'.format(y_col)
+            filename = 'our_model_lasso_{}.png'.format(y_col)
         output_dir = util.create_dir(output_dir)
         output_filepath = os.path.join(output_dir, filename)
         plt.savefig(output_filepath, bbox_inches='tight', dpi=500)

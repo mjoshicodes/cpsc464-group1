@@ -58,7 +58,7 @@ def get_git_dir():
         Full path of git repo home.
 
     """
-    return '/Users/megha/Fall_2022/CPSC464/dissecting-bias-master'
+    return '../../'
 
 
 def create_dir(*args):

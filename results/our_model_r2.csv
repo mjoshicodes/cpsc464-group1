@@ -1,0 +1,13 @@
+formula (y ~ x),holdout_r2,holdout_obs
+log_cost_t ~ risk_score_t,0.1181928218392605,16099.0
+gagne_sum_t ~ risk_score_t,0.3120951763169575,16099.0
+log_cost_avoidable_t ~ risk_score_t,0.10367880315385014,16099.0
+log_cost_t ~ log_cost_t_hat,0.16751557201069567,16099.0
+gagne_sum_t ~ log_cost_t_hat,0.34900104654911146,16099.0
+log_cost_avoidable_t ~ log_cost_t_hat,0.08770968752701058,16099.0
+log_cost_t ~ gagne_sum_t_hat,0.07370191566657835,16099.0
+gagne_sum_t ~ gagne_sum_t_hat,0.7326520763970078,16099.0
+log_cost_avoidable_t ~ gagne_sum_t_hat,0.10274292773334781,16099.0
+log_cost_t ~ log_cost_avoidable_t_hat,0.10582662967453194,16099.0
+gagne_sum_t ~ log_cost_avoidable_t_hat,0.5821257654994701,16099.0
+log_cost_avoidable_t ~ log_cost_avoidable_t_hat,0.1351566362907859,16099.0
