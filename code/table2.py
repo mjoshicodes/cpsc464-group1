@@ -174,7 +174,7 @@ def build_table2(k=0.03):
     OUTPUT_DIR = util.create_dir(os.path.join(git_dir, 'results'))
 
     # load holdout predictions generated from model
-    holdout_pred_fp = os.path.join(OUTPUT_DIR, 'model_lasso_predictors.csv')
+    holdout_pred_fp = os.path.join(OUTPUT_DIR, 'our_model_lasso_predictors.csv')
     holdout_pred_df = pd.read_csv(holdout_pred_fp)
 
     # calculate algorithm performance on alternative labels

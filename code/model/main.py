@@ -152,10 +152,11 @@ def main():
                            log_cost_avoidable_r2_df])
 
         # save r2 file CSV
+        print("PRINTED!")
         if include_race:
-            filename = 'model_r2_race.csv'
+            filename = 'our_model_r2_race.csv'
         else:
-            filename = 'model_r2.csv'
+            filename = 'our_model_r2.csv'
         output_filepath = os.path.join(OUTPUT_DIR, filename)
         print('...writing to {}'.format(output_filepath))
         r2_df.to_csv(output_filepath, index=False)
@@ -190,10 +191,11 @@ def main():
         util.convert_to_percentile(holdout_pred_df_subset, 'risk_score_t')
 
     # save to CSV
+    print("PRINTED!")
     if include_race:
-        filename = 'model_lasso_predictors_race.csv'
+        filename = 'our_model_lasso_predictors_race.csv'
     else:
-        filename = 'model_lasso_predictors.csv'
+        filename = 'our_model_lasso_predictors.csv'
     output_filepath = os.path.join(OUTPUT_DIR, filename)
     print('...HOLDOUT PREDICTIONS saved to {}'.format(output_filepath))
     holdout_pred_df_subset.to_csv(output_filepath, index=False)

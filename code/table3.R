@@ -22,7 +22,7 @@ df_enrollment_rate <- dt[, list(enrollment_rate = mean(program_enrolled_t)), by 
 
 # load prediction file ----------------------------------------------------------
 filepath <- res_dir
-filename <- 'model_lasso_predictors.csv'
+filename <- 'our_model_lasso_predictors.csv'
 pred_df <- MyFread(filename, filepath) %>% as.data.table
 pred_df[, race := ifelse(dem_race_black, 'black', 'white')]
 
