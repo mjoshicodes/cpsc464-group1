@@ -103,7 +103,7 @@ def build_table1():
 
     # define filepath
     git_dir = util.get_git_dir()
-    data_fp = os.path.join(git_dir, 'data', 'data_new.csv')
+    data_fp = os.path.join(git_dir, 'data', 'data_augmented.csv')
 
     # load df
     data_df = pd.read_csv(data_fp)

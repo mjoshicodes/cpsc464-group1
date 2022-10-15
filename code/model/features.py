@@ -40,6 +40,7 @@ def get_comorbidity_features(df):
         List of comorbidity features.
 
     """
+    # NOTE: 'our_gagne_score' and their 'gagne_sum_t' are both outcomes, not features
     comorbidity_features = []
     comorbidity_sum = 'gagne_sum_tm1'
     suffix_elixhauser = '_elixhauser_tm1'

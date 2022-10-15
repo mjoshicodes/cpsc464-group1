@@ -9,9 +9,10 @@ import model.util as util
 def get_concentration_metric_df(k, holdout_pred_df,
                                 y_predictors=['log_cost_t',
                                               'log_cost_avoidable_t',
-                                              'gagne_sum_t'],
+                                              'gagne_sum_t',
+                                              'our_gagne_score'],
                                 outcomes=['log_cost_t', 'log_cost_avoidable_t',
-                                          'gagne_sum_t', 'dem_race_black']):
+                                          'gagne_sum_t', 'our_gagne_score', 'dem_race_black']):
     """Calculate concentration of a given outcome of interest (columns) for
     each algorithm trained label, and calculate fraction black in the high-risk
     patient group.
@@ -39,6 +40,7 @@ def get_concentration_metric_df(k, holdout_pred_df,
         'cost_avoidable_t': 'Avoidable costs',
         'log_cost_avoidable_t': 'Avoidable costs',
         'gagne_sum_t': 'Active chronic conditions',
+        'our_gagne_score': 'ADDED: Calculated gagne score',
         'dem_race_black': 'Race black'
     }
 
@@ -170,8 +172,8 @@ def build_table2(k=0.03):
         Table 2.
     """
     # define output dir
-    git_dir = util.get_git_dir()
-    OUTPUT_DIR = util.create_dir(os.path.join(git_dir, 'results'))
+    #git_dir = util.get_git_dir()
+    OUTPUT_DIR = util.create_dir(os.path.join('../', 'results'))
 
     # load holdout predictions generated from model
     holdout_pred_fp = os.path.join(OUTPUT_DIR, 'our_model_lasso_predictors.csv')
