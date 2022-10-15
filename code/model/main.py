@@ -21,7 +21,7 @@ def load_data_df():
     """
     # define filepath
     git_dir = util.get_git_dir()
-    data_fp = os.path.join(git_dir, 'data', 'data_new.csv')
+    data_fp = os.path.join(git_dir, 'data', 'data_added.csv')
 
     # load df
     data_df = pd.read_csv(data_fp)
@@ -62,7 +62,7 @@ def get_Y_x_df(df, verbose):
     df['log_cost_avoidable_t'] = util.convert_to_log(df, 'cost_avoidable_t')
 
     # labels (Y) to predict
-    Y_predictors = ['log_cost_t', 'gagne_sum_t', 'log_cost_avoidable_t']
+    Y_predictors = ['log_cost_t', 'gagne_sum_t', 'log_cost_avoidable_t', 'our_gagne_score']
 
     # redefine 'race' variable as indicator
     df['dem_race_black'] = np.where(df['race'] == 'black', 1, 0)
@@ -78,6 +78,7 @@ def get_Y_x_df(df, verbose):
 
 
 def main():
+    print("LOADING")
     # load data
     data_df = load_data_df()
 
@@ -142,6 +143,19 @@ def main():
                                                          plot=save_plot,
                                                          output_dir=OUTPUT_DIR)
 
+    # train model with Y = 'our_gagne_score'
+    our_gagne_score_r2_df, \
+    pred_our_gagne_score_df, \
+    our_gagne_score_lasso_coef_df = model.train_lasso(train_df,
+                                                         holdout_df,
+                                                         x_column_names,
+                                                         y_col='our_gagne_score',
+                                                         outcomes=Y_predictors,
+                                                         n_folds=n_folds,
+                                                         include_race=include_race,
+                                                         plot=save_plot,
+                                                         output_dir=OUTPUT_DIR)
+
     if save_r2:
         formulas = model.build_formulas('risk_score_t', outcomes=Y_predictors)
         risk_score_r2_df = model.get_r2_df(holdout_df, formulas)
@@ -152,7 +166,6 @@ def main():
                            log_cost_avoidable_r2_df])
 
         # save r2 file CSV
-        print("PRINTED!")
         if include_race:
             filename = 'our_model_r2_race.csv'
         else:
@@ -173,18 +186,23 @@ def main():
                                                    split='holdout')
     holdout_log_cost_avoidable_df = get_split_predictions(pred_log_cost_avoidable_df,
                                                           split='holdout')
+    holdout_our_gagne_score_df = get_split_predictions(pred_our_gagne_score_df,
+                                                          split='holdout')                                                      
 
     holdout_pred_df = pd.concat([holdout_df, holdout_log_cost_df,
                                  holdout_gagne_sum_t_df,
-                                 holdout_log_cost_avoidable_df], axis=1)
+                                 holdout_log_cost_avoidable_df,
+                                 holdout_our_gagne_score_df], axis=1)
 
     holdout_pred_df_subset = holdout_pred_df[['index', 'dem_race_black',
                                               'risk_score_t', 'gagne_sum_t',
                                               'cost_t', 'cost_avoidable_t',
+                                              'our_gagne_score',
                                               'program_enrolled_t',
                                               'log_cost_t_hat',
                                               'gagne_sum_t_hat',
-                                              'log_cost_avoidable_t_hat']].copy()
+                                              'log_cost_avoidable_t_hat',
+                                              'our_gagne_score_hat']].copy()
 
     # add risk_score_percentile column
     holdout_pred_df_subset['risk_score_t_percentile'] = \
