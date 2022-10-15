@@ -1,0 +1,100 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+```{r}
+library(plot0)
+library(ggplot2)
+```
+
+```{r}
+setwd("../data")
+data_dir <- getwd()
+data_filename <- "data_added.csv"
+df <- MyFread(data_filename , data_dir)
+```
+
+#Dataset Analysis - Right skewed data
+```{r}
+hist(df$risk_score_t, col = 'blue', main = "Risk Score Distribution", lwd = 2, xlab = "Risk Scores")
+```
+
+```{r}
+df$log10riskscore <- log10(df$risk_score_t)
+hist(df$log10riskscore, col = 'light blue', main = "Risk Score Distribution Normalized", lwd = 2, xlab = "Risk Scores (Base 10)")
+```
+
+```{r}
+race_breakdown <- data.frame(table(df$race))
+colnames(race_breakdown) <- c("Race", "Count")
+ggplot(data=race_breakdown, aes(x=Race, y=Count)) +
+   geom_bar(position=position_dodge(), stat="identity",
+           color= "Blue") + labs(title="Race breakdown of dataset")
+```
+
+
+```{r}
+risk_score_18_24 <- mean(df$risk_score_t[df$`dem_age_band_18-24_tm1` == 1])
+risk_score_25_34 <- mean(df$risk_score_t[df$`dem_age_band_25-34_tm1` == 1])
+risk_score_35_44 <- mean(df$risk_score_t[df$`dem_age_band_35-44_tm1` == 1])
+risk_score_45_54 <- mean(df$risk_score_t[df$`dem_age_band_45-54_tm1` == 1])
+risk_score_55_64 <- mean(df$risk_score_t[df$`dem_age_band_55-64_tm1` == 1])
+risk_score_65_74 <- mean(df$risk_score_t[df$`dem_age_band_65-74_tm1` == 1])
+risk_score_75_plus <- mean(df$risk_score_t[df$`dem_age_band_75+_tm1` == 1])
+age_breakdown <- data.frame(ages = c("18-24", "25-34","35-44", "45-54", "55-64", "65-74", "75+"), risk_score = c(risk_score_18_24, risk_score_25_34, risk_score_35_44, risk_score_45_54, risk_score_55_64, risk_score_65_74, risk_score_75_plus))
+```
+
+```{r}
+ggplot(data=age_breakdown, aes(x=ages, y=risk_score)) +
+   geom_bar(position=position_dodge(), stat="identity",
+           color= "Blue") + labs(title="Age vs Risk Score")
+```
+```{r}
+count_18_24 <- length(df$risk_score_t[df$`dem_age_band_18-24_tm1` == 1])
+count_25_34 <- length(df$risk_score_t[df$`dem_age_band_25-34_tm1` == 1])
+count_35_44 <- length(df$risk_score_t[df$`dem_age_band_35-44_tm1` == 1])
+count_45_54 <- length(df$risk_score_t[df$`dem_age_band_45-54_tm1` == 1])
+count_55_64 <- length(df$risk_score_t[df$`dem_age_band_55-64_tm1` == 1])
+count_65_74 <- length(df$risk_score_t[df$`dem_age_band_65-74_tm1` == 1])
+count_75_plus <- length(df$risk_score_t[df$`dem_age_band_75+_tm1` == 1])
+age_count_breakdown <- data.frame(ages = c("18-24", "25-34","35-44", "45-54", "55-64", "65-74", "75+"), count = c(count_18_24, count_25_34, count_35_44, count_45_54, count_55_64, count_65_74, count_75_plus))
+```
+
+```{r}
+ggplot(data=age_count_breakdown, aes(x=ages, y=count)) +
+   geom_bar(position=position_dodge(), stat="identity",
+           color= "Blue") + labs(title="Age Breakdown in Dataset")
+```
+
+```{r}
+setwd("../results")
+# Creating dataframes for each table
+filepath <- getwd()
+table_1_filename <- 'table1.csv'
+df_table1 <- MyFread(table_1_filename, filepath)
+table_2_filename <- 'table2_concentration_metric.csv'
+df_table2 <- MyFread(table_2_filename, filepath)
+table_3_filename <- 'table3.csv'
+df_table3 <- MyFread(table_3_filename, filepath)
+```
+# Descriptive statistics figures
+
+# Table 2 Figures
+```{r}
+row_to_keep = c(TRUE, TRUE, TRUE, TRUE, FALSE)
+df_table2_plot = df_table2[row_to_keep,]
+df_table2_plot[4, 1] <- "Gagne score"
+```
+
+```{r}
+table2_boxplot <- ggplot(df_table2_plot, aes(x = predictor, y = `Race black`, fill=predictor)) +
+  geom_bar(position=position_dodge(), stat="identity",
+           colour='black') +
+  geom_errorbar(aes(ymin=`Race black` - `Race black SE`, ymax=`Race black` + `Race black SE`), width=.2)
+table2_boxplot <- table2_boxplot + labs(title="Fraction of Black Patients in the group with the highest risk by predictor")
+```
+
+
+```{r}
+table2_boxplot
+```
