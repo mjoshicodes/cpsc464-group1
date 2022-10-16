@@ -28,6 +28,9 @@ def load_data_df():
 
     # because we removed patient
     data_df = data_df.reset_index()
+
+    # remove NaN rows
+    #data_df = data_df[data_df['bps_mean_t'].notna()]
     return data_df
 
 

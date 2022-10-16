@@ -12,7 +12,7 @@ This repository contains data and code needed to reproduce the main results for 
 1. *data*: A synthetic master dataset that closely mirrors the dataset used to produce the original results. The real data is kept private due to patient confidentiality standards.
 2. *code*: Code in R and Python that can be used to train and run the model, as well as replicate the figures and tables from the main manuscript.
 3. *results*: Our replication of these results using the synthetic dataset, as well as new results generated from our new training label.
-4. *ibm-fairness*: Code setup for future work with the IBM fairness model
+4. *ibm-fairness*: Code setup for future work with the IBM fairness model. We first ran and tested an example from the IBM website, downloading all necessary packages and fixing compatibility issues, and then modifying their code to create a skeleton for our code once we process our dataset.
 
 ## Synthetic Dataset Creation
 
