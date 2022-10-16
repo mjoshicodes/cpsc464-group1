@@ -103,7 +103,7 @@ def build_table1():
 
     # define filepath
     git_dir = util.get_git_dir()
-    data_fp = os.path.join(git_dir, 'data', 'data_augmented.csv')
+    data_fp = os.path.join('../', 'data', 'data_removed_cost.csv')
 
     # load df
     data_df = pd.read_csv(data_fp)
@@ -122,7 +122,8 @@ def build_table1():
     table1 = white_table1.merge(black_table1)
 
     # save output to CSV
-    filename = 'table1.csv'
+    # filename = 'table1.csv'
+    filename = 'table1_no_cost.csv'
     output_filepath = os.path.join(OUTPUT_DIR, filename)
     print('...writing to {}'.format(output_filepath))
     table1.to_csv(output_filepath, index=False)

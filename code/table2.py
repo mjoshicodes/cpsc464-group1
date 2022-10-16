@@ -176,7 +176,7 @@ def build_table2(k=0.03):
     OUTPUT_DIR = util.create_dir(os.path.join('../', 'results'))
 
     # load holdout predictions generated from model
-    holdout_pred_fp = os.path.join(OUTPUT_DIR, 'our_model_lasso_predictors.csv')
+    holdout_pred_fp = os.path.join(OUTPUT_DIR, 'no_cost_model_lasso_predictors.csv')
     holdout_pred_df = pd.read_csv(holdout_pred_fp)
 
     # calculate algorithm performance on alternative labels
@@ -188,7 +188,7 @@ def build_table2(k=0.03):
     table2 = pd.concat([concentration_df, best_worst_row], sort=False)
 
     # save output to CSV
-    filename = 'table2_concentration_metric.csv'
+    filename = 'table2_no_cost_concentration_metric.csv'
     output_filepath = os.path.join(OUTPUT_DIR, filename)
     print('...writing to {}'.format(output_filepath))
     table2.to_csv(output_filepath, index=True)

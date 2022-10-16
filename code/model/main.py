@@ -22,6 +22,7 @@ def load_data_df():
     # define filepath
     git_dir = util.get_git_dir()
     data_fp = os.path.join(git_dir, 'data', 'data_added.csv')
+    # data_fp = os.path.join(git_dir, 'data', 'data_removed_cost.csv')
 
     # load df
     data_df = pd.read_csv(data_fp)
@@ -167,9 +168,11 @@ def main():
 
         # save r2 file CSV
         if include_race:
-            filename = 'our_model_r2_race.csv'
+            # filename = 'our_model_r2_race.csv'
+            filename = 'no_cost_r2_race.csv'
         else:
             filename = 'our_model_r2.csv'
+            filename = 'no_cost_r2.csv'
         output_filepath = os.path.join(OUTPUT_DIR, filename)
         print('...writing to {}'.format(output_filepath))
         r2_df.to_csv(output_filepath, index=False)
@@ -212,8 +215,10 @@ def main():
     print("PRINTED!")
     if include_race:
         filename = 'our_model_lasso_predictors_race.csv'
+        # filename = 'no_cost_model_lasso_predictors_race.csv'
     else:
         filename = 'our_model_lasso_predictors.csv'
+        # filename = 'no_cost_model_lasso_predictors.csv'
     output_filepath = os.path.join(OUTPUT_DIR, filename)
     print('...HOLDOUT PREDICTIONS saved to {}'.format(output_filepath))
     holdout_pred_df_subset.to_csv(output_filepath, index=False)
