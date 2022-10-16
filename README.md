@@ -1,23 +1,15 @@
-# Repository Description
+U.S. healthcare providers use predictive algorithms to identify high-risk patients to prioritize in providing preemptive care, affecting health decisions for hundreds of millions of American patients. However, studies have found that many of these algorithms are racially biased, as they are less likely to recommend additional care to Black patients with the same health conditions as their white counterparts.
 
-* This repository was originally cloned and modified from [that of Obermeyer et. al's study](https://gitlab.com/labsysmed/dissecting-bias/-/tree/master). 
-* First, we worked on reproducing Obermeyer et. al's results.
-* Next, we made modifications and adding our own training labels to expand on and potentially even improve the results, namely the inclusion of Black patients in high-risk groups. We will be using a combination of techniques mentioned in the predictive healthcare algorithm papers we've read to build an improved model for predicting which patients require further healthcare resources.
-* The synthetic dataset is included in this repository, and we plan on applying our new model to the dataset.
+Our project aims to apply a variety of techniques to mitigate racial bias and improve fairness in these algorithms. We focus on the specific case study of the commercial healthcare algorithm studied by Obermeyer et al., which seeks to identify which patients would benefit the most from preemptive care. Our goals are to utilize techniques from the papers we studied, namely training labels that are fairer and more representative of patient health and changing the model infrastructure to enforce that biased input variables hold less weight. We also aim to incorporate our own novel techniques, including using the IBM Fairness classifier and dropping certain proxy variables for race.
 
-## Project Repository Structure
+So far, with this midterm project, we've laid the groundwork for creating improved training labels, dropping proxy variables, and incorporating the IBM fairness classifier, generating preliminary results for the former two techniques.
 
-This repository contains data and code needed to reproduce the main results for Obermeyer et. al's [paper]() Dissecting Racial Bias in an Algorithm Used to Manage the Health of Populations, as well as our new code.
+Results:
 
-1. *data*: A synthetic master dataset that closely mirrors the dataset used to produce the original results. The real data is kept private due to patient confidentiality standards.
-2. *code*: Code in R and Python that can be used to train and run the model, as well as replicate the figures and tables from the main manuscript.
-3. *results*: Our replication of these results using the synthetic dataset, as well as new results generated from our new training label.
-4. *ibm-fairness*: Code setup for future work with the IBM fairness model. We first ran and tested an example from the IBM website, downloading all necessary packages and fixing compatibility issues, and then modifying their code to create a skeleton for our code once we process our dataset.
+Pre processing dropping cost variables
+The current model trains on over 100 different variables, 13 of which are cost specific variables. That is, these variables are indicative on the amount spent on specific medical treatments such as physical therapy and surgical operations. In an effort to improve predictors, we decided to pre-process our dataset and remove these cost variables prior to training our model. This resulted in total costs and avoidable costs becoming better classifiers in that the fraction of black patients within the 97th percentile was higher than before (see Figure 4). This may suggest that changing the output label alone is not a sufficient strategy, and infact common commercial predictors such as total costs could be used if associated training cost variables are removed. We intend to explore this idea further.
+![alt text](https://github.com/mjoshicodes/cpsc464-group1/blob/main/figures/results_by_predictor.png)
 
-## Synthetic Dataset Creation
-
-Researchers used the [synthpop](https://cran.r-project.org/web/packages/synthpop/index.html) R package to create a synthetic version of the key variables needed to replicate all analyses in the paper, so we are working under the assumption that this data is highly representative of the dataset actually used in the study.
-
-The original [data dictionary](./data/data_dictionary.md) describing each of the individual variables from the authors is included.
-
-
+In processing Gagne Score
+We created a new index variable based on the Gagne score to gauge patient health and train the model with. Utilizing the synthetic dataset we calculated the associated Gagne score of each patient and trained our model on this predictor. The goal of suggesting this new predictor was to increase the ratio of Black patients that fell within the 97 percentile risk score, meaning that they would be eligible for the health program. While this predictor was not as effective as others suggested by Obermeyer et al. (see Figure 3) it still had a higher ratio of Black patients compared to the predictor of Total Cost, which is what most commercial algorithms use.
+![alt text](https://github.com/mjoshicodes/cpsc464-group1/blob/main/figures/results_dropped_costs_by_predictor.png)
