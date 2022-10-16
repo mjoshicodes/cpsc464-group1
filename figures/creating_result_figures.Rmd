@@ -98,3 +98,26 @@ table2_boxplot <- table2_boxplot + labs(title="Fraction of Black Patients in the
 ```{r}
 table2_boxplot
 ```
+```{r}
+table_2_no_cost_filename <- 'table2_no_cost_concentration_metric.csv'
+df_table2_no_cost <- MyFread(table_2_no_cost_filename, filepath)
+```
+
+```{r}
+row_to_keep = c(TRUE, TRUE, TRUE, TRUE, FALSE)
+df_table2_no_cost_plot = df_table2_no_cost[row_to_keep,]
+df_table2_no_cost_plot[4, 1] <- "Gagne score"
+```
+
+```{r}
+table2_no_cost_boxplot <- ggplot(df_table2_no_cost_plot, aes(x = predictor, y = `Race black`, fill=predictor)) +
+  geom_bar(position=position_dodge(), stat="identity",
+           colour='black') +
+  geom_errorbar(aes(ymin=`Race black` - `Race black SE`, ymax=`Race black` + `Race black SE`), width=.2)
+table2_boxplot <- table2_boxplot + labs(title="Fraction of Black Patients (DROPPED COSTS)")
+```
+
+```{r}
+table2_no_cost_boxplot
+```
+
