@@ -220,7 +220,7 @@ def main():
                                               'risk_score_t', 'gagne_sum_t',
                                               'cost_t', 'cost_avoidable_t',
                                               'our_gagne_score',
-                                              'our_cci_score'
+                                              'our_cci_score',
                                               'program_enrolled_t',
                                               'log_cost_t_hat',
                                               'gagne_sum_t_hat',
