@@ -97,6 +97,7 @@ def get_concentration_metric_df(k, holdout_pred_df,
             n = len(holdout_pred_df)
             import math
             # SE = sqrt[ p * (1-p) / n]
+            print(top_k_outcome, total_outcome, frac_top_k, n)
             se = math.sqrt((frac_top_k * (1-frac_top_k))/n)
 
             # add SE column to concentration_dict (row)
@@ -116,7 +117,49 @@ def get_concentration_metric_df(k, holdout_pred_df,
 
     return concentration_df[column_order]
 
-def build_table2(k=0.03):
+
+def get_best_worst_difference(df):
+    """Calculate difference between best and worst for each
+    outcome of interest.
+
+    Parameters
+    ----------
+    df : pd.DataFrame
+        Concentration metric df.
+
+    Returns
+    -------
+    pd.DataFrame
+        Table 2 for df.
+
+    """
+    # define dict to store 'Best-worst difference' metric for given outcome
+    # (final row in Table 2)
+    best_worst_dict = {
+        'predictor': 'Best-worst difference'
+    }
+
+    # for each concentration of a given outcome of interest (columns),
+    # calculate best - worst (same as max - min)
+    for col in df.columns:
+        # skip SE columns
+        if 'SE' == col[-2:]:
+            continue
+
+        # calculate best - worst
+        max = df[col].max()
+        min = df[col].min()
+        diff = max - min
+
+        # add best - worst calculate to best_worst_dict (row)
+        best_worst_dict[col] = diff
+
+    # convert to pd.DataFrame for pretty formatting
+    best_worst_row = pd.DataFrame(best_worst_dict, index=[0]).set_index('predictor')
+    return best_worst_row
+
+
+def build_table4(k=0.03):
     """Build Table 2 and save as CSV.
 
     Parameters
@@ -127,7 +170,7 @@ def build_table2(k=0.03):
     Returns
     -------
     pd.DataFrame
-        Table 2.
+        Table 4.
     """
     # define output dir
     #git_dir = util.get_git_dir()
@@ -138,123 +181,20 @@ def build_table2(k=0.03):
     holdout_pred_df = pd.read_csv(holdout_pred_fp)
 
     # calculate algorithm performance on alternative labels
-    #concentration_df = get_concentration_metric_df(k, holdout_pred_df)
+    concentration_df = get_concentration_metric_df(k, holdout_pred_df)
     # calculate best - worst
-    #best_worst_row = get_best_worst_difference(concentration_df)
+    best_worst_row = get_best_worst_difference(concentration_df)
 
-    # calculate counts in different groups
-    black_patients = 0
-    white_patients = 0
-    no_gagne = 0
-    yes_gagne = 0
-
-    high_percentile = 0.03
-    med_percentile = 0.45
-
-    top_high = int(high_percentile * len(holdout_pred_df))
-
-    for index, row in holdout_pred_df.iterrows():
-        if row['dem_race_black']:
-            black_patients += 1
-        else:
-            white_patients += 1
-
-        if row['gagne_sum_t'] == 0:
-            no_gagne += 1
-        else:
-            yes_gagne += 1
-
-    print("NO GAGNE, YES GAGNE: ", no_gagne, yes_gagne)
-
-        
-
-    # define lookup for human readable headings in Table 2
-    OUTCOME_DICT = {
-        'cost_t': 'Total costs',
-        'log_cost_t': 'Total costs',
-        'cost_avoidable_t': 'Avoidable costs',
-        'log_cost_avoidable_t': 'Avoidable costs',
-        'gagne_sum_t': 'Active chronic conditions',
-        'our_gagne_score': 'ADDED: Calculated gagne score',
-        'dem_race_black': 'Race black'
-    }
-
-    y_predictors=['log_cost_t', 'log_cost_avoidable_t', 'gagne_sum_t', 'our_gagne_score']
-    outcomes=['log_cost_t', 'log_cost_avoidable_t', 'gagne_sum_t', 'our_gagne_score', 'dem_race_black']
-    concentration_dict = dict()
-
-    
-
-    all_concentration_metric = []
-
-    for y_col in y_predictors:
-
-        y_hat_col = '{}_hat'.format(y_col)
-
-        # sort by y_hat_col
-        holdout_pred_df = holdout_pred_df.sort_values(by=y_hat_col, ascending=False)
-        # get top k% in terms of predicted risk
-        top_k_df = holdout_pred_df.iloc[:top_high]
-
-        black_patients_high = 0
-        white_patients_high = 0
-
-        for index, row in top_k_df.iterrows():
-            if row['dem_race_black']:
-                black_patients_high += 1
-            else:
-                white_patients_high += 1
-
-        # add column to concentration_dict (row)
-        concentration_dict[y_col] = dict()
-        concentration_dict[y_col]['black'] = black_patients_high
-        concentration_dict[y_col]['black %'] = black_patients_high / black_patients * 100
-        concentration_dict[y_col]['white'] = white_patients_high
-        concentration_dict[y_col]['white %'] = white_patients_high / white_patients * 100
-        print(black_patients_high, white_patients_high)
-
-        #all_concentration_metric.append(concentration_dict)
-
-    concentration_dict["TOTAL"] = dict()
-    concentration_dict["TOTAL"]["black"] = black_patients
-    concentration_dict["TOTAL"]["white"] = white_patients
+    # combine all rows to build our Table 2
+    table4 = pd.concat([concentration_df, best_worst_row], sort=False)
 
     # save output to CSV
-    filename = 'table5_concentration_metric.csv'
-    output_filepath = os.path.join(OUTPUT_DIR, filename)
-    df = pd.DataFrame(concentration_dict)
-    print('...writing to {}'.format(output_filepath))
-    df.to_csv(output_filepath)
-
-    '''filename = 'table5_concentration_metric.csv'
+    filename = 'table4_concentration_metric.csv'
     output_filepath = os.path.join(OUTPUT_DIR, filename)
     print('...writing to {}'.format(output_filepath))
-    table2.to_csv(output_filepath, index=True)'''
+    table4.to_csv(output_filepath, index=True)
 
-    #return table2
-
-    #print additional info!
-
-    chronic_illnesses_col = '{}_hat'.format("log_cost_t")
-
-    # sort by y_hat_col
-    holdout_pred_df = holdout_pred_df.sort_values(by=chronic_illnesses_col, ascending=False)
-    # get top k% in terms of predicted risk
-    top_k_df = holdout_pred_df.iloc[:top_high]
-
-    no_active_conditions = 0
-    yes_active_conditions = 0
-
-    for index, row in top_k_df.iterrows():
-        if row['gagne_sum_t'] > 0:
-            yes_active_conditions += 1
-        else:
-            no_active_conditions += 1
-
-    # add column to concentration_dict (row)
-    print("CHRONIC CONDITIONS?", yes_active_conditions, no_active_conditions)
-
-    
+    return table4
 
 if __name__ == '__main__':
-    build_table2(k=0.03)
+    build_table4(k=0.45)
