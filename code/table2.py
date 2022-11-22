@@ -10,9 +10,10 @@ def get_concentration_metric_df(k, holdout_pred_df,
                                 y_predictors=['log_cost_t',
                                               'log_cost_avoidable_t',
                                               'gagne_sum_t',
-                                              'our_gagne_score'],
+                                              'our_gagne_score',
+                                              'our_cci_score'],
                                 outcomes=['log_cost_t', 'log_cost_avoidable_t',
-                                          'gagne_sum_t', 'our_gagne_score', 'dem_race_black']):
+                                          'gagne_sum_t', 'our_gagne_score', 'our_cci_score','dem_race_black']):
     """Calculate concentration of a given outcome of interest (columns) for
     each algorithm trained label, and calculate fraction black in the high-risk
     patient group.
@@ -41,6 +42,7 @@ def get_concentration_metric_df(k, holdout_pred_df,
         'log_cost_avoidable_t': 'Avoidable costs',
         'gagne_sum_t': 'Active chronic conditions',
         'our_gagne_score': 'ADDED: Calculated gagne score',
+        'our_cci_score': 'ADDED: Calculated CCI score',
         'dem_race_black': 'Race black'
     }
 
@@ -176,7 +178,7 @@ def build_table2(k=0.03):
     OUTPUT_DIR = util.create_dir(os.path.join('../', 'results'))
 
     # load holdout predictions generated from model
-    holdout_pred_fp = os.path.join(OUTPUT_DIR, 'no_cost_model_lasso_predictors.csv')
+    holdout_pred_fp = os.path.join(OUTPUT_DIR, 'our_model_lasso_predictors.csv')
     holdout_pred_df = pd.read_csv(holdout_pred_fp)
 
     # calculate algorithm performance on alternative labels
@@ -188,6 +190,7 @@ def build_table2(k=0.03):
     table2 = pd.concat([concentration_df, best_worst_row], sort=False)
 
     # save output to CSV
+    # filename = 'table2_cci_added.csv'
     filename = 'table2_no_cost_concentration_metric.csv'
     output_filepath = os.path.join(OUTPUT_DIR, filename)
     print('...writing to {}'.format(output_filepath))
