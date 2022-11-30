@@ -20,7 +20,7 @@ def load_data_df():
     """
     # define filepath
     git_dir = util.get_git_dir()
-    data_fp = os.path.join(git_dir, 'data', 'data_new.csv')
+    data_fp = os.path.join(git_dir, 'data', 'data_added.csv')
 
     # load df
     data_df = pd.read_csv(data_fp)
@@ -84,6 +84,7 @@ def main():
     dropped_df = create_new_df(data_df)
     print("NEW STATS")
     generate_stats(dropped_df)
+    dropped_df.to_csv("../../data/data_subsetted.csv")
 
 
 if __name__ == '__main__':
