@@ -21,7 +21,7 @@ class RiskDataset(StandardDataset):
         #                         '..', 'data', 'raw', 'german', 'german.data')
 
 
-        filepath = "/Users/amaytewari/Desktop/AIF360/aif360/data/raw/data_new.csv"
+        filepath = "/Users/megha/Fall_2022/CPSC464/Git/cpsc464-group1/data/data_new.csv"
 
         print(filepath)
 
