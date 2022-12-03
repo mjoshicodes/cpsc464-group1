@@ -45,7 +45,6 @@ def get_concentration_metric_df(k, holdout_pred_df,
     }
 
     #top_k = int(k * len(holdout_pred_df))
-    top_k = 482
     all_concentration_metric = []  # save all rows of Table 2 to variable
 
     # iterate through each predictor (algorithm training label)
@@ -152,7 +151,8 @@ def build_table2(k=0.03):
     high_percentile = k
     med_percentile = 0.45
 
-    top_high = int(high_percentile * len(holdout_pred_df))
+    #top_high = int(high_percentile * len(holdout_pred_df))
+    top_high = 482
 
     for index, row in holdout_pred_df.iterrows():
         if row['dem_race_black']:
@@ -165,7 +165,7 @@ def build_table2(k=0.03):
         else:
             yes_gagne += 1
 
-    print("No Chronic Conditions: ", no_gagne, "Chronic Conditions: ", yes_gagne)
+    #print("No Chronic Conditions: ", no_gagne, "Chronic Conditions: ", yes_gagne)
 
         
 
@@ -258,8 +258,8 @@ def build_table2(k=0.03):
         print("Black patients + illnesses (y/n): ", black_yes_chronic, black_no_chronic, "White patients + illnesses (y/n): ", white_yes_chronic, white_no_chronic)
         if black_no_chronic and white_no_chronic != 0:
             print("Avg cost for patients with and without ACC: ", yes_chronic_cost / (black_yes_chronic + white_yes_chronic), no_chronic_cost / (black_no_chronic + white_no_chronic))
-        print("BLACK DISTRIBUTION: ", black_scores)
-        print("WHITE DISTRIBUTION: ", white_scores)
+        #print("BLACK DISTRIBUTION: ", black_scores)
+        #print("WHITE DISTRIBUTION: ", white_scores)
         #all_concentration_metric.append(concentration_dict)
 
     concentration_dict["TOTAL"] = dict()
@@ -299,7 +299,7 @@ def build_table2(k=0.03):
             no_active_conditions += 1
 
     # add column to concentration_dict (row)
-    print("# of patients selected with chronic conditions (y/n):", yes_active_conditions, no_active_conditions)
+    #print("# of patients selected with chronic conditions (y/n):", yes_active_conditions, no_active_conditions)
 
     
 
