@@ -44,7 +44,8 @@ def get_concentration_metric_df(k, holdout_pred_df,
         'dem_race_black': 'Race black'
     }
 
-    top_k = int(k * len(holdout_pred_df))
+    #top_k = int(k * len(holdout_pred_df))
+    top_k = 482
     all_concentration_metric = []  # save all rows of Table 2 to variable
 
     # iterate through each predictor (algorithm training label)
@@ -148,7 +149,7 @@ def build_table2(k=0.03):
     no_gagne = 0
     yes_gagne = 0
 
-    high_percentile = 0.03
+    high_percentile = k
     med_percentile = 0.45
 
     top_high = int(high_percentile * len(holdout_pred_df))
@@ -207,6 +208,10 @@ def build_table2(k=0.03):
         no_chronic_cost = 0
         yes_chronic_cost = 0
 
+        black_scores = [0] * 200
+        white_scores = [0] * 200
+
+   
         for index, row in top_k_df.iterrows():
             if row['dem_race_black']:
                 black_patients_high += 1
@@ -215,6 +220,12 @@ def build_table2(k=0.03):
                     black_yes_chronic += 1
                 else:
                     black_no_chronic += 1
+                if row['our_gagne_score'] < 0:
+                    black_scores[0] += 1
+                else:
+                    col = int(row['our_gagne_score'])
+                    black_scores[col] += 1
+                
             else:
                 white_patients_high += 1
                 white_gagne_sum += row['gagne_sum_t']
@@ -222,6 +233,12 @@ def build_table2(k=0.03):
                     white_yes_chronic += 1
                 else:
                     white_no_chronic += 1
+                if row['our_gagne_score'] < 0:
+                    white_scores[0] += 1
+                else:
+                    col = int(row['our_gagne_score'])
+                    white_scores[col] += 1
+            
 
             # specifics for chronic conditions
             if row['gagne_sum_t'] > 0:
@@ -241,6 +258,8 @@ def build_table2(k=0.03):
         print("Black patients + illnesses (y/n): ", black_yes_chronic, black_no_chronic, "White patients + illnesses (y/n): ", white_yes_chronic, white_no_chronic)
         if black_no_chronic and white_no_chronic != 0:
             print("Avg cost for patients with and without ACC: ", yes_chronic_cost / (black_yes_chronic + white_yes_chronic), no_chronic_cost / (black_no_chronic + white_no_chronic))
+        print("BLACK DISTRIBUTION: ", black_scores)
+        print("WHITE DISTRIBUTION: ", white_scores)
         #all_concentration_metric.append(concentration_dict)
 
     concentration_dict["TOTAL"] = dict()
@@ -285,4 +304,4 @@ def build_table2(k=0.03):
     
 
 if __name__ == '__main__':
-    build_table2(k=0.03)
+    build_table2(k=0.35)
