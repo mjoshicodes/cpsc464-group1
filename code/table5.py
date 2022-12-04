@@ -10,9 +10,9 @@ def get_concentration_metric_df(k, holdout_pred_df,
                                 y_predictors=['log_cost_t',
                                               'log_cost_avoidable_t',
                                               'gagne_sum_t',
-                                              'our_gagne_score'],
+                                              'our_gagne_score', 'our_cci_score'],
                                 outcomes=['log_cost_t', 'log_cost_avoidable_t',
-                                          'gagne_sum_t', 'our_gagne_score', 'dem_race_black']):
+                                          'gagne_sum_t', 'our_gagne_score', 'our_cci_score', 'dem_race_black']):
     """Calculate concentration of a given outcome of interest (columns) for
     each algorithm trained label, and calculate fraction black in the high-risk
     patient group.
@@ -41,6 +41,7 @@ def get_concentration_metric_df(k, holdout_pred_df,
         'log_cost_avoidable_t': 'Avoidable costs',
         'gagne_sum_t': 'Active chronic conditions',
         'our_gagne_score': 'ADDED: Calculated gagne score',
+        'our_cci_score': 'ADDED: CCI',
         'dem_race_black': 'Race black'
     }
 
@@ -177,11 +178,12 @@ def build_table2(k=0.03):
         'log_cost_avoidable_t': 'Avoidable costs',
         'gagne_sum_t': 'Active chronic conditions',
         'our_gagne_score': 'ADDED: Calculated gagne score',
+        'our_cci_score': 'ADDED: CCI',
         'dem_race_black': 'Race black'
     }
 
-    y_predictors=['log_cost_t', 'log_cost_avoidable_t', 'gagne_sum_t', 'our_gagne_score']
-    outcomes=['log_cost_t', 'log_cost_avoidable_t', 'gagne_sum_t', 'our_gagne_score', 'dem_race_black']
+    y_predictors=['log_cost_t', 'log_cost_avoidable_t', 'gagne_sum_t', 'our_gagne_score', 'our_cci_score']
+    outcomes=['log_cost_t', 'log_cost_avoidable_t', 'gagne_sum_t', 'our_gagne_score', 'our_cci_score', 'dem_race_black']
     concentration_dict = dict()
 
     
@@ -301,7 +303,14 @@ def build_table2(k=0.03):
     # add column to concentration_dict (row)
     #print("# of patients selected with chronic conditions (y/n):", yes_active_conditions, no_active_conditions)
 
-    
+    '''
+    bottom_k_df = holdout_pred_df.iloc[top_high:]
+    count_white_unselected = 0
+    for index, row in bottom_k_df.iterrows():
+        if row['dem_race_black'] == False and row['gagne_sum_t'] > 6:
+            count_white_unselected += 1
+    print(count_white_unselected) 
+    '''
 
 if __name__ == '__main__':
     build_table2(k=0.35)
