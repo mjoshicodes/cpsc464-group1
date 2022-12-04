@@ -191,7 +191,7 @@ def build_table2(k=0.03):
 
     # save output to CSV
     # filename = 'table2_cci_added.csv'
-    filename = 'table2_no_cost_concentration_metric.csv'
+    filename = 'table2_cost_dropped.csv'
     output_filepath = os.path.join(OUTPUT_DIR, filename)
     print('...writing to {}'.format(output_filepath))
     table2.to_csv(output_filepath, index=True)

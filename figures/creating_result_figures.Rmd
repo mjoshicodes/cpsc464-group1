@@ -76,7 +76,7 @@ setwd("../results")
 filepath <- getwd()
 table_1_filename <- 'table1.csv'
 df_table1 <- MyFread(table_1_filename, filepath)
-table_2_filename <- 'table2_cci_added.csv'
+table_2_filename <- 'table2_cost_dropped.csv'
 df_table2 <- MyFread(table_2_filename, filepath)
 table_3_filename <- 'table3.csv'
 df_table3 <- MyFread(table_3_filename, filepath)
@@ -93,17 +93,18 @@ df_table2_plot[5, 1] <- "CCI score"
 ```
 
 ```{r}
-table2_boxplot <- ggplot(df_table2_plot, aes(x = predictor, y = `Race black`, fill=predictor)) +
+table2_boxplot<- ggplot(df_table2_plot, aes(x = predictor, y = `Race black`, fill=predictor)) +
   geom_bar(position=position_dodge(), stat="identity",
            colour='black') +
   geom_errorbar(aes(ymin=`Race black` - `Race black SE`, ymax=`Race black` + `Race black SE`), width=.2)
-table2_boxplot <- table2_boxplot + labs(title="Fraction of Black Patients in the group with the highest risk by predictor")
+table2_boxplot <- table2_boxplot + labs(title="Fraction of Black Patients in Program (DROPPED COSTS)")
 ```
-
 
 ```{r}
 table2_boxplot
 ```
+
+
 ```{r}
 table_2_no_cost_filename <- 'table2_no_cost_concentration_metric.csv'
 df_table2_no_cost <- MyFread(table_2_no_cost_filename, filepath)
@@ -118,19 +119,11 @@ df_table2_no_cost_plot[5, 1] <- "CCI score"
 ```
 
 ```{r}
-table2_no_cost_boxplot <-ggplot(df_table2_no_cost_plot, aes(x = predictor, y = `Race black`, fill=predictor)) +
-  geom_bar(position=position_dodge(), stat="identity",
-           colour='black') +
-  geom_errorbar(aes(ymin=`Race black` - `Race black SE`, ymax=`Race black` + `Race black SE`), width=.2)
-table2_no_cost_boxplot_title <- table2_boxplot + labs(title="Fraction of Black Patients in the group with the highest risk by predictor")
-```
-
-```{r}
 table2_no_cost_boxplot <- ggplot(df_table2_no_cost_plot, aes(x = predictor, y = `Race black`, fill=predictor)) +
   geom_bar(position=position_dodge(), stat="identity",
            colour='black') +
   geom_errorbar(aes(ymin=`Race black` - `Race black SE`, ymax=`Race black` + `Race black SE`), width=.2)
-table2_no_cost_boxplot_title <- table2_boxplot + labs(title="Fraction of Black Patients (DROPPED COSTS)")
+table2_no_cost_boxplot_title <- table2_boxplot + labs(title="Fraction of Black Patients")
 ```
 
 ```{r}

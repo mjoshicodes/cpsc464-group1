@@ -21,8 +21,10 @@ def load_data_df():
     """
     # define filepath
     git_dir = util.get_git_dir()
+    # data_fp = os.path.join(git_dir, 'data', 'data_dropped_cost_with_cci.csv')
+    # data_fp = os.path.join(git_dir, 'data', 'data_with_cci.csv')
     # data_fp = os.path.join(git_dir, 'data', 'data_added.csv')
-    data_fp = os.path.join(git_dir, 'data', 'data_subsetted.csv')
+    data_fp = os.path.join(git_dir, 'data', 'data_removed_cost.csv')
     # data_fp = os.path.join(git_dir, 'data', 'data_removed_cost.csv')
 
     # load df

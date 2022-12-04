@@ -7,8 +7,6 @@ from aif360.datasets import StandardDataset
 
 default_mappings = {
     'label_maps': [{1.0: '>50K', 0.0: '<=50K'}],
-    'protected_attribute_maps': [{1.0: 'White', 0.0: 'Non-white'},
-                                 {1.0: 'Male', 0.0: 'Female'}]
 }
 
 class AdultDataset(StandardDataset):
